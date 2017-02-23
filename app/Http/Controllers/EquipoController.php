@@ -126,7 +126,7 @@ class EquipoController extends Controller
 
 		$ejecuta = shell_exec( $comando );
 
-		$filename = "$aleatorio.$equipo";
+		$filename = "$aleatorio.$equipo->namespace";
 
 		if ( file_exists( $filename ) ) {
 			$jsonStr = file_get_contents( $filename );
