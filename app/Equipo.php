@@ -19,10 +19,13 @@ class Equipo extends Model
 	    'fecha_actualizacion'
     ];
 
-
 	protected $hidden = [
 		'compania_id'
 	];
+
+	public function getNamespaceAttribute( ) {
+		return strtolower($this->compania->acronimo.$this->nombre);
+	}
 
 	public function personas() {
 		return $this->belongsToMany('App\Persona');

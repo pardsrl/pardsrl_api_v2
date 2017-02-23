@@ -108,7 +108,7 @@ class EquipoController extends Controller
      * Obtiene el conjunto de puntos que representan las variables del equipo en un rango de fechas determinado
      *
      */
-	public function getHistorico(HistoricoRequest $request,$equipo ) {
+	public function getHistorico(HistoricoRequest $request, Equipo $equipo ) {
 
 		$reqParams = $request->only( 'tipo', 'condicion', 'resolucion', 'fecha_pozo', 'desde', 'hasta' );
 
@@ -117,7 +117,7 @@ class EquipoController extends Controller
 		$pythonScriptsDir = config( 'app.python.scripts_dir' );
 
 		$params = ['python_scripts_dir' => $pythonScriptsDir];
-		$params += ['equipo' => $equipo ];
+		$params += ['equipo' => $equipo->namespace ];
 		$params += $reqParams + [ 'aleatorio' => $aleatorio ];
 
 		$formato = 'python %sjson_delivery_var.py %s %d %d %d %s %s %s %s';
