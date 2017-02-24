@@ -132,7 +132,8 @@ class EquipoController extends Controller
 		if ( file_exists( $filename ) ) {
 			$jsonStr = file_get_contents( $filename );
 
-			unlink( $filename );
+			$borra   = "rm -f " . $filename;
+			shell_exec( $borra );
 
 		} else {
 			return new JsonResponse(['detail' => "No se pudo generar el archivo temporal de intervencion"], 500);
