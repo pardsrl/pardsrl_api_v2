@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Equipo;
 use App\Http\Requests\HistoricoRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
@@ -134,7 +135,7 @@ class EquipoController extends Controller
 			unlink( $filename );
 
 		} else {
-			return abort( 500, "No se pudo generar el archivo temporal de intervencion" );
+			return new JsonResponse(['detail' => "No se pudo generar el archivo temporal de intervencion"], 500);
 		}
 
 
