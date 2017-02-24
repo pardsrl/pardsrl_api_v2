@@ -28,6 +28,14 @@ class RouteServiceProvider extends ServiceProvider
 //	    });
 
         parent::boot();
+
+        if($this->app->runningInConsole()){
+	        /** @var \Illuminate\Routing\UrlGenerator $url */
+	        $url = $this->app['url'];
+	        // Force the application URL
+	        $url->forceRootUrl(config('app.url'));
+        }
+
     }
 
     /**
