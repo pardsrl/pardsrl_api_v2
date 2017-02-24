@@ -15,3 +15,7 @@ Route::resource('/equipos','EquipoController');
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');

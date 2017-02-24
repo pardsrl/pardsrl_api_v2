@@ -180,6 +180,10 @@ return [
 		 * ApiDoc Service Providers...
 		 */
 	    Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
+	    /*
+	     * Laravel Passport
+	     */
+	    Laravel\Passport\PassportServiceProvider::class,
 
     ],
 

@@ -18,17 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group([],function() {
+//secure group
+Route::group(['middleware'=>'auth:api'],function() {
 
 	Route::resource('equipos','EquipoController');
 
 	Route::get('/equipos/{equipo}/personas','EquipoController@getPersonas');
 
 	Route::get('/equipos/{equipo}/historico','EquipoController@getHistorico');
-});
-
-
-Route::group([],function(){
 
 	Route::resource('companias','CompaniaController');
 
@@ -40,8 +37,11 @@ Route::group([],function(){
 	Route::resource('intervenciones','IntervencionController',[
 		'parameters' => ['intervenciones' => 'intervencion']
 	]);
+});
+
+
+Route::group([],function(){
 
 	Route::get('/ping','DefaultController@ping');
-
 
 });

@@ -37,13 +37,13 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
+            'driver'   => 'session',
+            'provider' => 'extusers',
         ],
 
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'driver'   => 'passport',
+            'provider' => 'extusers',
         ],
     ],
 
@@ -68,6 +68,12 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'extusers' => [
+            //'driver' => 'ext_user',
+            'driver' => 'eloquent',
+            'model'  => App\Usuario::class,
         ],
 
         // 'users' => [
