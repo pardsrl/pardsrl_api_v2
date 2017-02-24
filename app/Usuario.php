@@ -29,7 +29,7 @@ class Usuario extends Authenticatable
 	 * @var array
 	 */
 	protected $hidden = [
-		'password', 'remember_token',
+		'password', 'remember_token','salt','confirmation_token','email_canonical',
 	];
 
 	/**
