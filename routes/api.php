@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 //secure group
-Route::group(['middleware'=>['auth:api'],function() {
+Route::group(['middleware'=>'auth:api'],function() {
 
 	Route::resource('equipos','EquipoController');
 
