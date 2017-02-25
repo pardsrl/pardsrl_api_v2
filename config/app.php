@@ -184,7 +184,10 @@ return [
 	     * Laravel Passport
 	     */
 	    Laravel\Passport\PassportServiceProvider::class,
-
+	    /*
+	     * Adds CORS (Cross-Origin Resource Sharing) headers support in your Laravel application
+	     */
+	    Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*

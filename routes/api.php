@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 //secure group
-Route::group(['middleware'=>['auth:api','cors']],function() {
+Route::group(['middleware'=>['auth:api'],function() {
 
 	Route::resource('equipos','EquipoController');
 
@@ -40,7 +40,7 @@ Route::group(['middleware'=>['auth:api','cors']],function() {
 });
 
 
-Route::group(['middleware'=>'cors'],function(){
+Route::group([],function(){
 
 	Route::get('/ping','DefaultController@ping');
 
