@@ -10,10 +10,11 @@ class Persona extends Model
 
 	use DateSerializable;
 
-	protected $dates = [
-		'fecha_creacion'      ,
-		'fecha_actualizacion'
-	];
+	const CREATED_AT = 'fecha_creacion';
+
+
+	const UPDATED_AT = 'fecha_actualizacion';
+
 
 	protected $table = "persona";
 
@@ -21,6 +22,10 @@ class Persona extends Model
 		'pivot','usuario_id'
 	];
 
+
+	public function equipos(  ) {
+		return $this->belongsToMany('App\Equipo');
+	}
 	public function usuario( ) {
 		return $this->belongsTo('App\Usuario');
 	}

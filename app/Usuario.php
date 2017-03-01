@@ -87,4 +87,8 @@ class Usuario extends Authenticatable
 		return $user;
 	}
 
+	public function persona(){
+		return $this->hasOne('App\Persona');
+	}
+
 }

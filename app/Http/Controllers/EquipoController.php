@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Equipo;
 use App\Http\Requests\HistoricoRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class EquipoController
@@ -27,7 +31,11 @@ class EquipoController extends Controller
     public function index(Request $request)
     {
 
-        return Equipo::with(['personas','compania'])->paginate($request->input('rpp',config('app.paginator.default_size')));
+	    $user = Auth::user();
+
+	    return $user->persona->equipos()->paginate($request->input('rpp',config('app.paginator.default_size')));
+
+//        return Equipo::with(['personas','compania'])->where('persona',$user->persona)->paginate($request->input('rpp',config('app.paginator.default_size')));
 
     }
 
@@ -61,6 +69,10 @@ class EquipoController extends Controller
      */
     public function show(Equipo $equipo)
     {
+	    $user = Auth::user();
+
+	    if(! $user->persona->equipos->contains($equipo)) return App::abort(404,"Recurso no encontrado ");
+
         return $equipo;
     }
 

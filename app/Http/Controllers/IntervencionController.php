@@ -22,7 +22,15 @@ class IntervencionController extends Controller
      */
     public function index(Request $request)
     {
-	    return Intervencion::with(['pozo','pozo.yacimiento'])->paginate($request->input('rpp',config('app.paginator.default_size')));
+    	$param = $request->only('equipo_id','pozo_id');
+
+    	$where = [];
+
+	    foreach ( $param as $key => $value ) {
+		    if ($value) $where[] = [$key,'=',$value];
+    	}
+
+	    return Intervencion::where($where)->orderBy('fecha_creacion','DESC')->with(['pozo','pozo.yacimiento'])->paginate($request->input('rpp',config('app.paginator.default_size')));
     }
 
     /**

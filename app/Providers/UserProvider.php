@@ -15,7 +15,7 @@ class UserProvider  implements IlluminateUserProvider
      */
     public function boot()
     {
-
+	    dd('UserProvider');
     }
 
     /**
@@ -34,6 +34,7 @@ class UserProvider  implements IlluminateUserProvider
 	 */
 	public function retrieveById($identifier)
 	{
+		dd('retrieveById');
 		//return Usuario::find(3);
 	}
 	/**
@@ -62,6 +63,7 @@ class UserProvider  implements IlluminateUserProvider
 	 */
 	public function retrieveByCredentials(array $credentials)
 	{
+		dd('retrieveByCredentials');
 		//return Usuario::find(3);
 	}
 	/**
@@ -73,7 +75,7 @@ class UserProvider  implements IlluminateUserProvider
 	 */
 	public function validateCredentials(Authenticatable $user, array $credentials)
 	{
-		// Check that given credentials belong to the given user
+		dd('implementar validateCredentials');// Check that given credentials belong to the given user
 	}
 
 }

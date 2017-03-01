@@ -14,16 +14,15 @@ class Equipo extends Model
 
     protected $table = "equipo";
 
-	protected $dates = [
-    	'fecha_creacion'      ,
-	    'fecha_actualizacion'
-    ];
+	const CREATED_AT = 'fecha_creacion';
+
+	const UPDATED_AT = 'fecha_actualizacion';
 
 	protected $hidden = [
 		'compania_id'
 	];
 
-	public function getNamespaceAttribute( ) {
+	public function getNamespaceAttribute() {
 		return strtolower($this->compania->acronimo.$this->nombre);
 	}
 
@@ -33,5 +32,9 @@ class Equipo extends Model
 
 	public function compania() {
 		return $this->belongsTo('App\Compania');
+	}
+
+	public function intervenciones() {
+		return $this->hasMany('App\Intervencion');
 	}
 }
