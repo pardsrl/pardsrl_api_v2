@@ -30,7 +30,7 @@ class IntervencionController extends Controller
 		    if ($value) $where[] = [$key,'=',$value];
     	}
 
-	    return Intervencion::where($where)->orderBy('fecha_creacion','DESC')->with(['pozo','pozo.yacimiento'])->paginate($request->input('rpp',config('app.paginator.default_size')));
+	    return Intervencion::where($where)->orderBy('fecha','DESC')->with(['pozo','pozo.yacimiento'])->paginate($request->input('rpp',config('app.paginator.default_size')));
     }
 
     /**
