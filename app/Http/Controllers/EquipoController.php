@@ -33,7 +33,7 @@ class EquipoController extends Controller
 
 	    $user = Auth::user();
 
-	    return $user->persona->equipos()->paginate($request->input('rpp',config('app.paginator.default_size')));
+	    return $user->persona->equipos()->with(['compania'])->paginate($request->input('rpp',config('app.paginator.default_size')));
 
 //        return Equipo::with(['personas','compania'])->where('persona',$user->persona)->paginate($request->input('rpp',config('app.paginator.default_size')));
 
