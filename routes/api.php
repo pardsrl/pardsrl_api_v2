@@ -29,6 +29,7 @@ Route::group(['middleware'=>'auth:api'],function() {
 
 	Route::resource('companias','CompaniaController');
 
+	Route::resource('pozos','PozoController');
 
 	Route::resource('novedades','NovedadController',[
 		'parameters' => ['novedades' => 'novedad']

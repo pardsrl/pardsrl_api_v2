@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Equipo;
+use App\Http\Requests\IntervencionRequest;
 use App\Intervencion;
+use App\Pozo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class IntervencionController
@@ -49,9 +54,34 @@ class IntervencionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(IntervencionRequest $request)
     {
-        //
+	    $param = $request->only(['pozo','equipo','accion','fecha']);
+
+	    $intervencion = new Intervencion();
+
+	    $pozo = Pozo::find($param['pozo']);
+
+	    $equipo = Equipo::find($param['equipo']);
+
+	    $usuario = Auth::user();
+
+	    $intervencion->fecha = new Carbon($param['fecha']);
+
+	    $intervencion->accion = $param['accion'];
+
+	    $intervencion->activo = 1;
+
+	    $intervencion->pozo()->associate($pozo);
+
+	    $intervencion->equipo()->associate($equipo);
+
+	    $intervencion->creadoPor()->associate($usuario);
+
+	    $intervencion->save();
+
+	    return $intervencion;
+
     }
 
     /**
