@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Novedad;
+use App\Intervencion;
 use Illuminate\Http\Request;
 
 /**
@@ -24,7 +25,7 @@ class NovedadController extends Controller
      */
     public function index(Request $request)
     {
-	    return Novedad::paginate($request->input('rpp',config('app.paginator.default_size')));
+        return Novedad::with('maniobra')->paginate($request->input('rpp', config('app.paginator.default_size')));
     }
 
     /**
@@ -56,7 +57,7 @@ class NovedadController extends Controller
      */
     public function show(Novedad $novedad)
     {
-    	//dd($novedad);
+        //dd($novedad);
         return $novedad;
     }
 
@@ -92,5 +93,18 @@ class NovedadController extends Controller
     public function destroy(Novedad $novedad)
     {
         //
+    }
+
+    /**
+     * Obtiene Novedades filtradas por intervencion.
+     *
+     * @param  Intervencion  $intervencion  La intervencion que se desea filtrar
+     * @return Novedad|Collection           [description]
+     */
+    public function getByIntervencion(Request $request, Intervencion $intervencion)
+    {
+        $intervencionQb = Novedad::with('maniobra')->where('intervencion_id', $intervencion->id)->paginate($request->input('rpp', config('app.paginator.default_size')));
+
+        return $intervencionQb;
     }
 }

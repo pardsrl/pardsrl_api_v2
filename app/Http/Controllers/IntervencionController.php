@@ -27,15 +27,17 @@ class IntervencionController extends Controller
      */
     public function index(Request $request)
     {
-    	$param = $request->only('equipo_id','pozo_id');
+        $param = $request->only('equipo_id', 'pozo_id');
 
-    	$where = [];
+        $where = [];
 
-	    foreach ( $param as $key => $value ) {
-		    if ($value) $where[] = [$key,'=',$value];
-    	}
+        foreach ($param as $key => $value) {
+            if ($value) {
+                $where[] = [$key,'=',$value];
+            }
+        }
 
-	    return Intervencion::where($where)->orderBy('fecha','DESC')->with(['pozo','pozo.yacimiento'])->paginate($request->input('rpp',config('app.paginator.default_size')));
+        return Intervencion::where($where)->orderBy('fecha', 'DESC')->with(['pozo','pozo.yacimiento'])->paginate($request->input('rpp', config('app.paginator.default_size')));
     }
 
     /**
@@ -56,32 +58,31 @@ class IntervencionController extends Controller
      */
     public function store(IntervencionRequest $request)
     {
-	    $param = $request->only(['pozo','equipo','accion','fecha']);
+        $param = $request->only(['pozo','equipo','accion','fecha']);
 
-	    $intervencion = new Intervencion();
+        $intervencion = new Intervencion();
 
-	    $pozo = Pozo::find($param['pozo']);
+        $pozo = Pozo::find($param['pozo']);
 
-	    $equipo = Equipo::find($param['equipo']);
+        $equipo = Equipo::find($param['equipo']);
 
-	    $usuario = Auth::user();
+        $usuario = Auth::user();
 
-	    $intervencion->fecha = new Carbon($param['fecha']);
+        $intervencion->fecha = new Carbon($param['fecha']);
 
-	    $intervencion->accion = $param['accion'];
+        $intervencion->accion = $param['accion'];
 
-	    $intervencion->activo = 1;
+        $intervencion->activo = 1;
 
-	    $intervencion->pozo()->associate($pozo);
+        $intervencion->pozo()->associate($pozo);
 
-	    $intervencion->equipo()->associate($equipo);
+        $intervencion->equipo()->associate($equipo);
 
-	    $intervencion->creadoPor()->associate($usuario);
+        $intervencion->creadoPor()->associate($usuario);
 
-	    $intervencion->save();
+        $intervencion->save();
 
-	    return $intervencion;
-
+        return $intervencion;
     }
 
     /**
@@ -92,7 +93,7 @@ class IntervencionController extends Controller
      */
     public function show(Intervencion $intervencion)
     {
-	    //dd($e);
+        //dd($e);
         return $intervencion;
     }
 
@@ -128,5 +129,32 @@ class IntervencionController extends Controller
     public function destroy(Intervencion $intervencion)
     {
         //
+    }
+
+    /**
+     * Obtiene Intervenciones filtradas por equipo.
+     * Opcionalmente puede recibir un parametro <last> el cual indica que solamente retorna la última intervención.
+     *
+     * @param  Request $request [description]
+     * @param  Equipo  $equipo  El equipo que se desea filtrar
+     * @return Intervencion|Collection           [description]
+     */
+    public function getByEquipo(Request $request, Equipo $equipo)
+    {
+        $accion = $request->get('accion');
+
+        $intervencionQb = Intervencion::with('pozo')->where('equipo_id', $equipo->id)->latest('fecha');
+
+        if (!is_null($accion)) {
+            $intervencionQb->where('accion', $accion);
+        }
+
+        $last = $request->get('last');
+
+        $data = [];
+
+        $data['data'] = $last ? $intervencionQb->first() : $intervencionQb->get();
+        //si se requiere la última, solamente devuelvo esa, sino devuelvo toda la colleción
+        return $data;
     }
 }

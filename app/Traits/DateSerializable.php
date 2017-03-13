@@ -12,7 +12,7 @@ trait DateSerializable
 
 		$fallbackLocale = config('app.fallback_locale');
 
-//		dd($locale);
+		//dd($locale);
 
 		switch ($locale){
 			case 'es':

@@ -7,14 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Novedad extends Model
 {
-	use DateSerializable;
+    use DateSerializable;
 
-	protected $table = 'novedad';
+    protected $table = 'novedad';
 
-	protected $dates = [
-		'fecha_creacion'      ,
-		'fecha_actualizacion',
-		'inicio',
-		'fin'
-	];
+    const CREATED_AT = 'fecha_creacion';
+
+    const UPDATED_AT = 'fecha_actualizacion';
+
+    protected $dates = [
+        'inicio',
+        'fin'
+    ];
+
+    public function maniobra()
+    {
+        return $this->belongsTo('\App\Maniobra');
+    }
 }

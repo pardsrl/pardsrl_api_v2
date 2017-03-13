@@ -19,30 +19,32 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 //secure group
-Route::group(['middleware'=>'auth:api'],function() {
+Route::group(['middleware'=>'auth:api'], function () {
+    Route::resource('equipos', 'EquipoController');
 
-	Route::resource('equipos','EquipoController');
+    Route::get('/equipos/{equipo}/personas', 'EquipoController@getPersonas');
 
-	Route::get('/equipos/{equipo}/personas','EquipoController@getPersonas');
+    Route::get('/equipos/{equipo}/historico', 'EquipoController@getHistorico');
 
-	Route::get('/equipos/{equipo}/historico','EquipoController@getHistorico');
+    Route::resource('companias', 'CompaniaController');
 
-	Route::resource('companias','CompaniaController');
+    Route::resource('pozos', 'PozoController');
 
-	Route::resource('pozos','PozoController');
+    Route::resource('novedades', 'NovedadController', [
+        'parameters' => ['novedades' => 'novedad']
+    ]);
 
-	Route::resource('novedades','NovedadController',[
-		'parameters' => ['novedades' => 'novedad']
-	]);
+    Route::get('/novedades/intervencion/{intervencion}', 'NovedadController@getByIntervencion');
 
-	Route::resource('intervenciones','IntervencionController',[
-		'parameters' => ['intervenciones' => 'intervencion']
-	]);
+
+    Route::resource('intervenciones', 'IntervencionController', [
+        'parameters' => ['intervenciones' => 'intervencion']
+    ]);
+
+    Route::get('/intervenciones/equipo/{equipo}', 'IntervencionController@getByEquipo');
 });
 
 
-Route::group([],function(){
-
-	Route::get('/ping','DefaultController@ping');
-
+Route::group([], function () {
+    Route::get('/ping', 'DefaultController@ping');
 });

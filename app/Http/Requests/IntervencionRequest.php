@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IntervencionRequest extends FormRequest
@@ -25,7 +26,7 @@ class IntervencionRequest extends FormRequest
     {
         return [
                 'accion'    => 'in:0,1|required|numeric',
-                'fecha'     => 'required|date|after_or_equal:today',
+                'fecha'     => 'required|date|before_or_equal:today',
                 'pozo'      => 'required|numeric'
         ];
     }
@@ -38,12 +39,22 @@ class IntervencionRequest extends FormRequest
      */
     public function withValidator($validator)
     {
-        // $validator->after(function ($validator) {
-        //     $validator->errors()->add('fecha', 'Something is wrong with this field!');
-        //     // if ($this->somethingElseIsInvalid()) {
-        //     //     $validator->errors()->add('field', 'Something is wrong with this field!');
-        //     // }
-        // });
-    }
+        $validator->after(function ($validator) {
+            //$pozo_id = $this->pozo;
 
+            $equipo_id = $this->equipo;
+
+            $fecha = new Carbon($this->fecha);
+
+            // $intervencion = \App\Intervencion::where('pozo_id', $pozo_id)->where('equipo_id', $equipo_id)->latest('fecha')->first();
+            $intervencion = \App\Intervencion::where('equipo_id', $equipo_id)->latest('fecha')->first();
+
+
+            if ($intervencion && ($fecha->lte($intervencion->fecha))) {
+                $fecha = (new Carbon($intervencion->fecha))->format('d/m/y H:i');
+
+                $validator->errors()->add('fecha', "La fecha ingresada no puede ser menor o igual a la fecha de la última intervención ($fecha)");
+            }
+        });
+    }
 }

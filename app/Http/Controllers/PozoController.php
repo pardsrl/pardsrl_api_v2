@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Pozo;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PozoController extends Controller
 {
@@ -14,7 +15,24 @@ class PozoController extends Controller
      */
     public function index(Request $request)
     {
-        return Pozo::paginate($request->input('rpp',config('app.paginator.default_size')));
+        $params = $request->only('estado');
+
+        $page = $request->get('page', 1);
+
+        $rpp = $request->input('rpp', config('app.paginator.default_size'));
+
+        if (isset($params['estado'])) {
+            $pozosFiltrados = Pozo::all()->filter(function (Pozo $pozo, $key) use ($params) {
+                return $pozo->isAbierto() == $params['estado'];
+            });
+
+            //http://stackoverflow.com/a/38712699/7686911
+            $paginator = new LengthAwarePaginator($pozosFiltrados->forPage($page, $rpp)->values(), $pozosFiltrados->count(), $rpp, $page);
+
+            return $paginator;
+        }
+
+        return Pozo::paginate($rpp);
     }
 
     /**
