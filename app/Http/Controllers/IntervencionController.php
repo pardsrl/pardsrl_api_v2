@@ -62,9 +62,9 @@ class IntervencionController extends Controller
 
         $intervencion = new Intervencion();
 
-        $pozo = Pozo::find($param['pozo']);
+        $pozo    = Pozo::find($param['pozo']);
 
-        $equipo = Equipo::find($param['equipo']);
+        $equipo  = Equipo::find($param['equipo']);
 
         $usuario = Auth::user();
 

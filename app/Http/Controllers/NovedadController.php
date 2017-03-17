@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Novedad;
 use App\Intervencion;
 use Illuminate\Http\Request;
+use App\Http\Requests\NovedadRequest;
+use App\Maniobra;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 /**
  *
@@ -44,9 +48,41 @@ class NovedadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NovedadRequest $request)
     {
-        //
+        $param = $request->only(['maniobra','intervencion','inicio','fin','parcialManiobra','promedioUH','observaciones']);
+
+        $novedad  = new Novedad();
+
+        $maniobra     = Maniobra::find($param['maniobra']);
+
+        $intervencion = Intervencion::find($param['intervencion']);
+
+        $usuario = Auth::user();
+
+        $novedad->inicio = new Carbon($param['inicio']);
+
+        $novedad->fin = $param['fin'] ? new Carbon($param['fin']) : null;
+
+        $novedad->parcial_maniobra = $param['parcialManiobra'];
+
+        $novedad->promedio_uh = $param['promedioUH'];
+
+        $novedad->observaciones = $param['observaciones'] ? $param['observaciones'] : null ;
+
+        $novedad->activo = 1;
+
+        $novedad->generado = 0;
+
+        $novedad->maniobra()->associate($maniobra);
+
+        $novedad->intervencion()->associate($intervencion);
+
+        $novedad->creadoPor()->associate($usuario);
+
+        $novedad->save();
+
+        return $novedad;
     }
 
     /**
@@ -79,9 +115,39 @@ class NovedadController extends Controller
      * @param  \App\Novedad  $novedad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Novedad $novedad)
+    public function update(NovedadRequest $request, Novedad $novedad)
     {
-        //
+        $param = $request->only(['maniobra','intervencion','inicio','fin','parcialManiobra','promedioUH','observaciones']);
+
+        $maniobra     = Maniobra::find($param['maniobra']);
+
+        $intervencion = Intervencion::find($param['intervencion']);
+
+        $usuario = Auth::user();
+
+        $novedad->inicio = new Carbon($param['inicio']);
+
+        $novedad->fin = $param['fin'] ? new Carbon($param['fin']) : null;
+
+        $novedad->parcial_maniobra = $param['parcialManiobra'];
+
+        $novedad->promedio_uh = $param['promedioUH'];
+
+        $novedad->observaciones = $param['observaciones'] ? $param['observaciones'] : null ;
+
+        $novedad->activo = 1;
+
+        $novedad->generado = 0;
+
+        $novedad->maniobra()->associate($maniobra);
+
+        $novedad->intervencion()->associate($intervencion);
+
+        $novedad->actualizadoPor()->associate($usuario);
+
+        $novedad->save();
+
+        return $novedad;
     }
 
     /**

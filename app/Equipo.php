@@ -6,35 +6,50 @@ use App\Traits\DateSerializable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Equipo extends Model
 {
-
-	use DateSerializable;
+    use DateSerializable;
 
     protected $table = "equipo";
 
-	const CREATED_AT = 'fecha_creacion';
+    const CREATED_AT = 'fecha_creacion';
 
-	const UPDATED_AT = 'fecha_actualizacion';
+    const UPDATED_AT = 'fecha_actualizacion';
 
-	protected $hidden = [
-		'compania_id'
-	];
+    protected $hidden = [
+        'compania_id'
+    ];
 
-	public function getNamespaceAttribute() {
-		return strtolower($this->compania->acronimo.$this->nombre);
-	}
+    protected $appends = ['interviniendo'];
 
-	public function personas() {
-		return $this->belongsToMany('App\Persona');
-	}
+    public function getInterviniendoAttribute()
+    {
+        $intervencion = $this->intervenciones()->latest('fecha')->first();
 
-	public function compania() {
-		return $this->belongsTo('App\Compania');
-	}
+        if ($intervencion) {
+            return $intervencion->accion == 1 ? false : true;
+        }
 
-	public function intervenciones() {
-		return $this->hasMany('App\Intervencion');
-	}
+        return false;
+    }
+
+    public function getNamespaceAttribute()
+    {
+        return strtolower($this->compania->acronimo.$this->nombre);
+    }
+
+    public function personas()
+    {
+        return $this->belongsToMany('App\Persona');
+    }
+
+    public function compania()
+    {
+        return $this->belongsTo('App\Compania');
+    }
+
+    public function intervenciones()
+    {
+        return $this->hasMany('App\Intervencion');
+    }
 }

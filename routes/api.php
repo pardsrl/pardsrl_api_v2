@@ -42,6 +42,8 @@ Route::group(['middleware'=>'auth:api'], function () {
     ]);
 
     Route::get('/intervenciones/equipo/{equipo}', 'IntervencionController@getByEquipo');
+
+    Route::resource('maniobras', 'ManiobraController');
 });
 
 

@@ -15,13 +15,32 @@ class Novedad extends Model
 
     const UPDATED_AT = 'fecha_actualizacion';
 
-    protected $dates = [
-        'inicio',
-        'fin'
-    ];
+    protected $dates = ['inicio','fin'];
+
+    protected $appends = ['finIso8601'];
+
+    public function getFinIso8601Attribute()
+    {
+        return $this->fin ? $this->fin->toAtomString() : null;
+    }
 
     public function maniobra()
     {
         return $this->belongsTo('\App\Maniobra');
+    }
+
+    public function intervencion()
+    {
+        return $this->belongsTo('\App\Intervencion');
+    }
+
+    public function creadoPor()
+    {
+        return $this->belongsTo('App\Usuario');
+    }
+
+    public function actualizadoPor()
+    {
+        return $this->belongsTo('App\Usuario');
     }
 }
