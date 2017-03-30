@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\DateSerializable;
+use App\Intervencion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,7 +21,7 @@ class Equipo extends Model
         'compania_id'
     ];
 
-    protected $appends = ['interviniendo'];
+    protected $appends = ['namespace','interviniendo','ultimaIntervencion'];
 
     public function getInterviniendoAttribute()
     {
@@ -31,6 +32,13 @@ class Equipo extends Model
         }
 
         return false;
+    }
+
+    public function getUltimaIntervencionAttribute()
+    {
+        $intervencion = $this->intervenciones()->with(['pozo','pozo.yacimiento'])->latest('fecha')->first();
+
+        return $intervencion;
     }
 
     public function getNamespaceAttribute()
